@@ -1,11 +1,10 @@
-﻿# Project Name/Title Goes Here
-This will serve as a brief description of your project. Limit this to three sentences because it can become overly long at that point. This copy should draw the user in and make she/him want to read more.
+﻿# Smile Recognition
+Using machine learning and face recognition to predict if an image from a live webcam is smiling or not. Uses Python, OpenCV, and Scikit learn.
 
-| **Engineer** | **School** | **Area of Interest** | **Grade** |
-|:--:|:--:|:--:|:--:|
-| Firstname Lastname | Current Highschool | Electrical Engineering | Incoming Senior
+| **Caleb Yu** | **Saratoga High School** | **Machine Learning** | **Incoming Sophmore** |
 
-![Headstone Image](https://bluestampengineering.com/wp-content/uploads/2016/05/improve.jpg)
+
+![Headstone Image]([https://bluestampengineering.com/wp-content/uploads/2016/05/improve.jpg](https://lh3.googleusercontent.com/pw/AM-JKLWubDX9DI7mwGB0GznaocIjVxcxtainTurdJ3fOPy5NRXLLj4pDch6dC1Qk9dxsGlz61ufM4PvHH9JDj3iaYgpjzVn-Yt5OD8r2lnaCjcHA15QkBZKB-dYSp41W2ei77V1s7yR5B0-JXfX0EDRXHGZb=w1644-h1642-no?authuser=0))
   
 # Final Milestone
 My final milestone is the increased reliability and accuracy of my robot. I ameliorated the sagging and fixed the reliability of the finger. As discussed in my second milestone, the arm sags because of weight. I put in a block of wood at the base to hold up the upper arm; this has reverberating positive effects throughout the arm. I also realized that the forearm was getting disconnected from the elbow servo’s horn because of the weight stress on the joint. Now, I make sure to constantly tighten the screws at that joint. 
