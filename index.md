@@ -1,5 +1,5 @@
 ﻿# Smile Recognition
-Using machine learning and face recognition to predict if an image from a live webcam is smiling or not. Uses Python, OpenCV, and Scikit learn.
+Using machine learning and facial recognition to predict if an image from a live webcam is smiling or not. Uses Python, OpenCV, and Scikit learn.
 
 | **Caleb Yu** | **Saratoga High School** | **Machine Learning** | **Incoming Sophmore** |
 
