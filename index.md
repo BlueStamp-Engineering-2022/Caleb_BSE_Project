@@ -1,9 +1,9 @@
 ﻿# Smile Recognition
 Using machine learning and facial recognition to predict if an image from a live webcam is smiling or not. Uses Python, OpenCV, and Scikit learn.
 
-| **Caleb Yu** | **Saratoga High School** | **Machine Learning** | **Incoming Sophmore** |
-
-
+| **Engineer** | **School** | **Area of Interest** | **Grade** |
+|:--:|:--:|:--:|:--:|
+| Caleb Yu | Saratoga High School | Machine Learning | Incoming Sophomore |
 ![Headstone Image](https://lh3.googleusercontent.com/pw/AM-JKLWubDX9DI7mwGB0GznaocIjVxcxtainTurdJ3fOPy5NRXLLj4pDch6dC1Qk9dxsGlz61ufM4PvHH9JDj3iaYgpjzVn-Yt5OD8r2lnaCjcHA15QkBZKB-dYSp41W2ei77V1s7yR5B0-JXfX0EDRXHGZb=w1644-h1642-no?authuser=0)
   
 # Final Milestone
