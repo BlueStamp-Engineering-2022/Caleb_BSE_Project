@@ -4,6 +4,8 @@ Using machine learning and facial recognition to predict if an image from a live
 | **Engineer** | **School** | **Area of Interest** | **Grade** |
 |:--:|:--:|:--:|:--:|
 | Caleb Yu | Saratoga High School | Machine Learning | Incoming Sophomore |
+
+
 ![Headstone Image](https://lh3.googleusercontent.com/pw/AM-JKLWubDX9DI7mwGB0GznaocIjVxcxtainTurdJ3fOPy5NRXLLj4pDch6dC1Qk9dxsGlz61ufM4PvHH9JDj3iaYgpjzVn-Yt5OD8r2lnaCjcHA15QkBZKB-dYSp41W2ei77V1s7yR5B0-JXfX0EDRXHGZb=w1644-h1642-no?authuser=0)
   
 # Real time facial detection
@@ -24,4 +26,6 @@ My first milestone was setting up and hooking up the Raspberry Pi and all the ne
 
 
 # Starter Project (Big Time Watch)
+The starter project that I made was the the Big Time Watch. I had a lot of fun making this. :) 
+
 [![Starter Project](https://i3.ytimg.com/vi/whtRA3-QsV8/maxresdefault.jpg)](https://www.youtube.com/watch?v=whtRA3-QsV8){:target="_blank" rel="noopener"}
