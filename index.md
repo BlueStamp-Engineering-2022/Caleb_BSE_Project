@@ -23,5 +23,5 @@ My first milestone was setting up and hooking up the Raspberry Pi and all the ne
 
 
 
-# Starter Project(Big Time Watch)
-[![Starter Project](https://i3.ytimg.com/vi/whtRA3-QsV8/maxresdefault.jpg)]((https://www.youtube.com/watch?v=whtRA3-QsV8)){:target="_blank" rel="noopener"}
+# Starter Project (Big Time Watch)
+[![Starter Project](https://i3.ytimg.com/vi/whtRA3-QsV8/maxresdefault.jpg)](https://www.youtube.com/watch?v=whtRA3-QsV8){:target="_blank" rel="noopener"}
