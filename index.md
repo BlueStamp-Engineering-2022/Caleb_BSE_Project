@@ -26,6 +26,6 @@ My first milestone was setting up and hooking up the Raspberry Pi and all the ne
 
 
 # Starter Project (Big Time Watch)
-The starter project that I made was the the Big Time Watch. I had a lot of fun making this. :) 
+The starter project that I made was the the Big Time Watch. This wasn't my original project, but due to me screwing up the first one, I ended up with the watch. . I ran into a few problems while making this project. The first was the broken pins on the microcontroller. I substituted them with stripped solid core wires, which I had to solder at an angle to connect them to the microcontroller. The second problem I face was connectivity issues. Some of my pins weren't soldered in well, so I had to go and fix that. I had a lot fun making this project, even with the various problems I encountered, and really enjoyed seeing it work in the end. 
 
 [![Starter Project](https://i3.ytimg.com/vi/whtRA3-QsV8/maxresdefault.jpg)](https://www.youtube.com/watch?v=whtRA3-QsV8){:target="_blank" rel="noopener"}
