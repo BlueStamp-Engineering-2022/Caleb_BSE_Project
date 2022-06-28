@@ -1,3 +1,4 @@
+from __future__ import print_function
 import cv2
 import json
 import xml.etree.ElementTree as xml
@@ -15,6 +16,10 @@ from sklearn import metrics
 from matplotlib.patches import Rectangle
 from scipy.ndimage import zoom
 import argparse
+from matplotlib.patches import Rectangle
+import time
+
+
 
 #root = Tk()
 
@@ -194,97 +199,90 @@ def train_and_evaluate(clf, X_train, X_test, y_train, y_test):
 train_and_evaluate(svc_1, X_train, X_test, y_train, y_test)
 
 
+def detectAndDisplay(frame):
+    frame_gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    frame_gray = cv2.equalizeHist(frame_gray)
+    #-- Detect faces
+    faces = face_cascade.detectMultiScale(frame_gray)
+
+        #-- In each face, detect eyes
 
 
+    return frame_gray, faces
 
-def detect_face(frame):
-    cascPath = "haarcascade_frontalface_default.xml"
-    faceCascade = cv2.CascadeClassifier(cascPath)
-    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-    detected_faces = faceCascade.detectMultiScale(
-            gray,
-            scaleFactor=1.1,
-            minNeighbors=6,
-            minSize=(100, 100),
-            flags=cv2.CASCADE_SCALE_IMAGE
-        )
-    return gray, detected_faces
 
 def extract_face_features(gray, detected_face, offset_coefficients):
     (x, y, w, h) = detected_face
+
     horizontal_offset = offset_coefficients[0] * w
     vertical_offset = offset_coefficients[1] * h
-    extracted_face = gray[y+int(vertical_offset):y+h,x+int(horizontal_offset):x-int(horizontal_offset+w)]
-    new_extracted_face = zoom(extracted_face, (64. / extracted_face.shape[0], 64. / extracted_face.shape[0]))
+    extracted_face = gray#[y+int(vertical_offset):y-int(vertical_offset+h), x+int(horizontal_offset):x-int(horizontal_offset+w)]
+
+    new_extracted_face = zoom(extracted_face, (4096. / extracted_face.shape[0], 4096. / extracted_face.shape[1]))
+
+
     new_extracted_face = new_extracted_face.astype(float32)
+    #dimming image
+
     new_extracted_face /= float(new_extracted_face.max())
+
     return new_extracted_face
 
 def predict_face_is_smiling(extracted_face):
-    svc_1.reshape(-1, 1)
-    return svc_1.predict(extracted_face.ravel())
+    print(svc_1.predict(extracted_face))
+    print(svc_1.predict(extracted_face).sum())
+    return svc_1.predict(extracted_face).sum()/svc_1.predict(extracted_face).shape
 
-def test_recognition(c1, c2):
-    subplot(121)
-    extracted_face1 = extract_face_features(gray1, face1[0], (c1, c2))
-    imshow(extracted_face1, cmap='gray')
-    print(predict_face_is_smiling(extracted_face1))
-    subplot(122)
-    extracted_face2 = extract_face_features(gray2, face2[0], (c1, c2))
-    imshow(extracted_face2, cmap='gray')
-    print(predict_face_is_smiling(extracted_face2))
+parser = argparse.ArgumentParser(description='Code for Cascade Classifier tutorial.')
+parser.add_argument('--face_cascade', help='Path to face cascade.', default="/Users/josephyu/Desktop/BlueStamp/haarcascade_frontalface_alt.xml")
+parser.add_argument('--camera', help='Camera divide number.', type=int, default=0)
+args = parser.parse_args()
+face_cascade_name = args.face_cascade
+face_cascade = cv2.CascadeClassifier()
+if not face_cascade.load(cv2.samples.findFile(face_cascade_name)):
+    print('--(!)Error loading face cascade')
+    exit(0)
 
 
-def make_map(facefile):
-    c1_range = linspace(0, 0.35)
-    c2_range = linspace(0, 0.3)
-    result_matrix = nan * zeros_like(c1_range * c2_range[:, newaxis])
-    gray, detected_faces = detect_face(cv2.imread(facefile))
-    for face in detected_faces[:1]:
-        for ind1, c1 in enumerate(c1_range):
-            for ind2, c2 in enumerate(c2_range):
-                extracted_face = extract_face_features(gray, face, (c1, c2))
-                result_matrix[ind1, ind2] = predict_face_is_smiling(extracted_face)
-    return (c1_range, c2_range, result_matrix)
 
-cascPath = "haarcascade_frontalface_default.xml"
-faceCascade = cv2.CascadeClassifier(cascPath)
-
-video_capture = cv2.VideoCapture(0)
+camera_device = args.camera
+#-- 2. Read the video stream
+cap = cv2.VideoCapture(camera_device)
 
 while True:
     # Capture frame-by-frame
-    ret, frame = video_capture.read()
-
+    time.sleep(1)
+    ret, frame = cap.read()
 
     # detect faces
-    gray, detected_faces = detect_face(frame)
+    gray, detected_faces = detectAndDisplay(frame)
 
     face_index = 0
 
+    for (x,y,w,h) in detected_faces:
+        center = (x + w//2, y + h//2)
+        frame = cv2.ellipse(frame, center, (w//2, h//2), 0, 0, 360, (255, 0, 255), 4)
+        faceROI = gray[y:y+h,x:x+w]
     # predict output
-    for face in detected_faces:
-        (x, y, w, h) = face
+
+    for (x,y,w,h) in detected_faces:
+
         if w > 100:
-            # draw rectangle around face
-            cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
 
-            # extract features
-            extracted_face = extract_face_features(gray, face, (0.03, 0.05)) #(0.075, 0.05)
 
+
+            extracted_face = extract_face_features(gray, (x,y,w,h),  (0.075, 0.05))#(0.03, 0.05)
             # predict smile
-            prediction_result = predict_face_is_smiling(extracted_face)
 
-            # draw extracted face in the top right corner
-            frame[face_index * 64: (face_index + 1) * 64, -65:-1, :] = cv2.cvtColor(extracted_face * 255, cv2.COLOR_GRAY2RGB)
+            prediction_result = predict_face_is_smiling(extracted_face)            # draw extracted face in the top right corner
+            #frame[face_index * 64: (face_index + 1) * 64, -65:-1, :] = cv2.cvtColor(extracted_face * 255, cv2.COLOR_GRAY2RGB)
 
             # annotate main image with a label
-            if prediction_result == 1:
-                cv2.putText(frame, "SMILING",(x,y), cv2.FONT_HERSHEY_SIMPLEX, 2, 155, 10)
-            else:
-                cv2.putText(frame, "not smiling",(x,y), cv2.FONT_HERSHEY_SIMPLEX, 2, 155, 10)
+            label = "Smiling" if prediction_result >= 0.5 else "Not Smiling"
 
-            # increment counter
+            cv2.putText(frame, label,(x,y), cv2.FONT_HERSHEY_SIMPLEX, 2, 155, 10)
+
+#            # increment counter
             face_index += 1
 
 
@@ -295,5 +293,4 @@ while True:
         break
 
 # When everything is done, release the capture
-video_capture.release()
 cv2.destroyAllWindows()
