@@ -28,6 +28,7 @@ svc_1 = SVC(kernel='linear')
 faces = datasets.fetch_olivetti_faces()
 print(faces.keys())
 print(faces.data)
+matplotlib.use('Agg')
 
 
 
@@ -201,9 +202,9 @@ train_and_evaluate(svc_1, X_train, X_test, y_train, y_test)
 
 def detectAndDisplay(frame):
     frame_gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-    frame_gray = cv2.equalizeHist(frame_gray)
+    #frame_gray = cv2.equalizeHist(frame_gray)
     #-- Detect faces
-    faces = face_cascade.detectMultiScale(frame_gray)
+    faces = face_cascade.detectMultiScale(frame_gray, 1.1, 4)
 
         #-- In each face, detect eyes
 
@@ -211,27 +212,64 @@ def detectAndDisplay(frame):
     return frame_gray, faces
 
 
-def extract_face_features(gray, detected_face, offset_coefficients):
+def extract_face_features(gray, detected_face):
     (x, y, w, h) = detected_face
-
-    horizontal_offset = offset_coefficients[0] * w
-    vertical_offset = offset_coefficients[1] * h
-    extracted_face = gray#[y+int(vertical_offset):y-int(vertical_offset+h), x+int(horizontal_offset):x-int(horizontal_offset+w)]
-
-    new_extracted_face = zoom(extracted_face, (4096. / extracted_face.shape[0], 4096. / extracted_face.shape[1]))
-
-
+    horizontal_offset = round(0.15 * w)
+    vertical_offset = round(0.2 * h)
+    print(horizontal_offset)
+    print(vertical_offset)
+    print(gray.shape[0])
+    print(gray.shape[1])
+    extracted_face = gray[y+vertical_offset:y+h, x+horizontal_offset:x+w-horizontal_offset]
+    print(extracted_face.shape[0])
+    print(extracted_face.shape[1])
+    new_extracted_face = zoom(extracted_face, (64. / extracted_face.shape[0], 64. / extracted_face.shape[1]))
     new_extracted_face = new_extracted_face.astype(float32)
+    new_extracted_face /= float(new_extracted_face.max())
+    #display_face(new_extracted_face[:, :])
+    new_extracted_face = new_extracted_face.ravel().reshape(1, -1)
+    #new_extracted_face = new_extracted_face.astype(float32)
     #dimming image
 
-    new_extracted_face /= float(new_extracted_face.max())
+    #new_extracted_face /= float(new_extracted_face.max())
+
+
 
     return new_extracted_face
 
 def predict_face_is_smiling(extracted_face):
     print(svc_1.predict(extracted_face))
-    print(svc_1.predict(extracted_face).sum())
-    return svc_1.predict(extracted_face).sum()/svc_1.predict(extracted_face).shape
+    #avg = svc_1.predict(extracted_face).sum()/svc_1[0].predict(extracted_face).shape
+    #print(avg)
+    return svc_1.predict(extracted_face)
+
+def predict_results(detected_faces):
+
+# predict output
+
+
+    for (x,y,w,h) in detected_faces:
+
+        if w > 200:
+
+
+
+            extracted_face = extract_face_features(gray, (x,y,w,h))#(0.03, 0.05)
+            # predict smile
+
+            prediction_result = predict_face_is_smiling(extracted_face)            # draw extracted face in the top right corner
+            #frame[face_index * 64: (face_index + 1) * 64, -65:-1, :] = cv2.cvtColor(extracted_face * 255, cv2.COLOR_GRAY2RGB)
+
+            # annotate main image with a label
+            label = "Smiling" if prediction_result >= 0.5 else "Not Smiling"
+
+            cv2.putText(frame, label,(x,y), cv2.FONT_HERSHEY_SIMPLEX, 2, 155, 10)
+
+            cv2.imshow('Video', frame)
+
+
+
+
 
 parser = argparse.ArgumentParser(description='Code for Cascade Classifier tutorial.')
 parser.add_argument('--face_cascade', help='Path to face cascade.', default="/Users/josephyu/Desktop/BlueStamp/haarcascade_frontalface_alt.xml")
@@ -249,42 +287,32 @@ camera_device = args.camera
 #-- 2. Read the video stream
 cap = cv2.VideoCapture(camera_device)
 
+
+
+counter = 0
+
 while True:
     # Capture frame-by-frame
-    time.sleep(1)
+
+
+
     ret, frame = cap.read()
 
     # detect faces
     gray, detected_faces = detectAndDisplay(frame)
 
-    face_index = 0
 
     for (x,y,w,h) in detected_faces:
         center = (x + w//2, y + h//2)
         frame = cv2.ellipse(frame, center, (w//2, h//2), 0, 0, 360, (255, 0, 255), 4)
         faceROI = gray[y:y+h,x:x+w]
-    # predict output
-
-    for (x,y,w,h) in detected_faces:
-
-        if w > 100:
 
 
+    if counter%15 == 0:
+            x = threading.Thread(target=predict_results, args=(detected_faces,))
+            x.start()
 
-            extracted_face = extract_face_features(gray, (x,y,w,h),  (0.075, 0.05))#(0.03, 0.05)
-            # predict smile
-
-            prediction_result = predict_face_is_smiling(extracted_face)            # draw extracted face in the top right corner
-            #frame[face_index * 64: (face_index + 1) * 64, -65:-1, :] = cv2.cvtColor(extracted_face * 255, cv2.COLOR_GRAY2RGB)
-
-            # annotate main image with a label
-            label = "Smiling" if prediction_result >= 0.5 else "Not Smiling"
-
-            cv2.putText(frame, label,(x,y), cv2.FONT_HERSHEY_SIMPLEX, 2, 155, 10)
-
-#            # increment counter
-            face_index += 1
-
+    counter  = counter + 1
 
     # Display the resulting frame
     cv2.imshow('Video', frame)
