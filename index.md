@@ -8,8 +8,8 @@ Using machine learning and facial recognition to predict if an image from a live
 
 ![Headstone Image](https://lh3.googleusercontent.com/pw/AM-JKLWubDX9DI7mwGB0GznaocIjVxcxtainTurdJ3fOPy5NRXLLj4pDch6dC1Qk9dxsGlz61ufM4PvHH9JDj3iaYgpjzVn-Yt5OD8r2lnaCjcHA15QkBZKB-dYSp41W2ei77V1s7yR5B0-JXfX0EDRXHGZb=w1644-h1642-no?authuser=0)
   
-# Milestone 3: Real time facial detection
-My final milestone is the increased reliability and accuracy of my robot. I ameliorated the sagging and fixed the reliability of the finger. As discussed in my second milestone, the arm sags because of weight. I put in a block of wood at the base to hold up the upper arm; this has reverberating positive effects throughout the arm. I also realized that the forearm was getting disconnected from the elbow servo’s horn because of the weight stress on the joint. Now, I make sure to constantly tighten the screws at that joint. 
+# Milestone 3: Accuracy and Frame rate
+My final milestone is the increased reliability and accuracy of my robot. After milestone #2 I searched through my code trying to find out why it was running so slow. I realize that it was because I had a 2 for loops in a while loop. This basically means that my code runs exponentially slower. I fixed this by creating a seperate thread to run the functions of extracting, detecting, and predicting that runs every 15 frames. This allows the video feed to come in faster, so I get around 10-15 fps now. Besides the frame rate, I also ran into a problem with the accuracy of the program. This was because the detected and extracted face that the program got was not cropped and resized correctly. So I created a different file to test the code using images. I learned how to crop 2d arrays by slicing and was able to make the machine more accurate.
 
 [![Final Milestone](https://res.cloudinary.com/marcomontalbano/image/upload/v1612573869/video_to_markdown/images/youtube--F7M7imOVGug-c05b58ac6eb4c4700831b2b3070cd403.jpg )](https://www.youtube.com/watch?v=F7M7imOVGug&feature=emb_logo "Final Milestone"){:target="_blank" rel="noopener"}
 
